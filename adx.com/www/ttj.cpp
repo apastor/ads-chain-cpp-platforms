@@ -33,7 +33,7 @@ using namespace adschain;
 
 const std::chrono::milliseconds BID_TIME = std::chrono::milliseconds(120);
 
-const std::string tempCustody = "AUCTION";
+const std::string tempCustody = "RTB";
 class ttj: public cppcms::application {
   std::string ssp = "ssp.com";
   std::string dsp = "dsp.com";
