@@ -1,0 +1,72 @@
+<% c++ #include "content.h" %>
+<% skin my_skin %>
+<% view master uses content::master %>
+
+<% template title() %><%= title %><% end %>
+<% template page_content() %>Override  Me<% end %>
+<% template render() %>
+
+<!-- <!doctype html> -->
+<!-- Website Template by freewebsitetemplates.com -->
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><% include title() %></title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/mobile.css" media="screen and (max-width : 568px)">
+	<script type="text/javascript" src="js/mobile.js"></script>
+</head>
+<body>
+	<div id="header">
+		<a href='<% url "" %>' class="logo">
+			<img src="images/logo.jpg" alt="">
+		</a>
+		<ul id="navigation">
+			<li class="selected">
+				<a href='<% url "" %>'>home</a>
+			</li>
+			<li>
+				<a href='<% url "/about" %>'>about</a>
+			</li>
+			<li>
+				<a href='<% url "/gallery" %>'>gallery</a>
+			</li>
+			<li>
+				<a href='<% url "/blog" %>'>blog</a>
+			</li>
+			<li>
+				<a href='<% url "/contact" %>'>contact</a>
+			</li>
+		</ul>
+	</div>
+	<div id="body">
+<% include page_content() %>
+	</div>
+	<div id="footer">
+		<div>
+			<p>&copy; 2023 by Mustacchio. All rights reserved.</p>
+
+			<ul>
+				<li>
+					<a href="http://freewebsitetemplates.com/go/twitter/" id="twitter">twitter</a>
+				</li>
+				<li>
+					<a href="http://freewebsitetemplates.com/go/facebook/" id="facebook">facebook</a>
+				</li>
+				<li>
+					<a href="http://freewebsitetemplates.com/go/googleplus/" id="googleplus">googleplus</a>
+				</li>
+				<li>
+					<a href="http://pinterest.com/fwtemplates/" id="pinterest">pinterest</a>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+</body>
+</html>
+
+<% end template %>
+<% end view %>
+<% end skin %>
