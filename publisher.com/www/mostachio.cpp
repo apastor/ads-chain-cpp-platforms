@@ -130,7 +130,7 @@ class mostachio : public cppcms::application {
                       << "&ad-custody[0]=" << domain
                       << "&ad-custody[1]=" << sspserver
                       << "&custody-index=" << "1"
-                      << "&sign[0]=" << dom_sign
+                      << "&signature[0]=" << dom_sign
                       << "&keys-string[0]=" << sign_string;
       } else {
 //        adtag_list_300x250 << "&tuuid=" << uuid;

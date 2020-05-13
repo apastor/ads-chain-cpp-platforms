@@ -81,7 +81,7 @@ class ttj: public cppcms::application {
       const char nextCustodyIndex[2] = {custodyIndex[0] + 1, '\0'};
       std::string prevDomain = adInfo["ad-custody"][prevCustodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
-      std::string receivedSignature = std::string(adInfo["sign"][prevCustodyIndex].GetString());
+      std::string receivedSignature = std::string(adInfo["signature"][prevCustodyIndex].GetString());
       if (!verifier->verifyB64(senderPubKey.get(), receivedSignature, GetSignatureAtIndex(adInfo, prevCustodyIndex))) {
         logger.information("Signature not valid. Discarding");
         response().make_error_response(400);
@@ -91,11 +91,11 @@ class ttj: public cppcms::application {
       rapidjson::Document::AllocatorType &allocator = adInfo.GetAllocator();
       adInfo["ad-custody"].AddMember(nextCustodyIndex, tempCustody, allocator);
       std::stringstream msgstrTemp, sign_strTemp;
-      msgstrTemp << adInfo["sign"][prevCustodyIndex].GetString() << ";" << tempCustody;
-      sign_strTemp << "sign[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
+      msgstrTemp << adInfo["signature"][prevCustodyIndex].GetString() << ";" << tempCustody;
+      sign_strTemp << "signature[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
       adInfo["keys-string"].AddMember(custodyIndex, sign_strTemp.str(), allocator);
       std::string adx_temp_sign = signer->signB64(msgstrTemp.str());
-      adInfo["sign"].AddMember(custodyIndex, adx_temp_sign, allocator);
+      adInfo["signature"].AddMember(custodyIndex, adx_temp_sign, allocator);
 
     }
 
@@ -125,11 +125,11 @@ class ttj: public cppcms::application {
       adInfo["ad-custody"][nextCustodyIndex].SetString(dsp, adInfo.GetAllocator());
       adInfo["custody-index"] = nextCustodyIndex;
       std::stringstream msgstrFinal, sign_strFinal;
-      msgstrFinal << adInfo["sign"][prevCustodyIndex].GetString() << ";" << dsp;
-      sign_strFinal << "sign[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
+      msgstrFinal << adInfo["signature"][prevCustodyIndex].GetString() << ";" << dsp;
+      sign_strFinal << "signature[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
       adInfo["keys-string"][custodyIndex].SetString(sign_strFinal.str(), adInfo.GetAllocator());
       std::string adx_final_sign = signer->signB64(msgstrFinal.str());
-      adInfo["sign"][custodyIndex].SetString(adx_final_sign, adInfo.GetAllocator());
+      adInfo["signature"][custodyIndex].SetString(adx_final_sign, adInfo.GetAllocator());
 
     }
     rapidjson::StringBuffer bufferWin;

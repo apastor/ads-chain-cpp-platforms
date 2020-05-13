@@ -83,7 +83,7 @@ class ttj : public cppcms::application {
       std::string prevDomain = adInfo["ad-custody"][prevCustodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
 //      sw.stop("public-key-service");
-      std::string receivedSignature = std::string(adInfo["sign"][prevCustodyIndex].GetString());
+      std::string receivedSignature = std::string(adInfo["signature"][prevCustodyIndex].GetString());
 //      logger.information("receivedSignature: %s", receivedSignature);
 
       if (!verifier->verifyB64(senderPubKey.get(), receivedSignature, GetSignatureAtIndex(adInfo, prevCustodyIndex))) {
@@ -95,12 +95,12 @@ class ttj : public cppcms::application {
       adInfo["ad-custody"].AddMember(nextCustodyIndex, adexchange, allocator);
       adInfo["custody-index"] = nextCustodyIndex;
       std::stringstream msgstr, sign_str;
-      msgstr << adInfo["sign"][prevCustodyIndex].GetString() << ";" << adexchange;
-      sign_str << "sign[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
+      msgstr << adInfo["signature"][prevCustodyIndex].GetString() << ";" << adexchange;
+      sign_str << "signature[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
 
       adInfo["keys-string"].AddMember(custodyIndex, sign_str.str(), allocator);
       std::string ssp_sign = signer->signB64(msgstr.str());
-      adInfo["sign"].AddMember(custodyIndex, ssp_sign, adInfo.GetAllocator());
+      adInfo["signature"].AddMember(custodyIndex, ssp_sign, adInfo.GetAllocator());
 //      sw.stop("signing");
     }
 //     logger.information(RapidJsonDocument2QueryString(adInfo));

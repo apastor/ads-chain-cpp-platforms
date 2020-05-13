@@ -9,14 +9,14 @@
     "3": "RTB"
   },
   "custody-index": "2",
-  "sign": {
+  "signature": {
     "0": "MEUCIQDs5AMUU65tp8Z7REM+fz3btHuhozx+yZ1fAJaaYZz6twIgMQBpgrt9FeawFKZDDliuE7i2s6vihgFy8D+kpBgXnQM=",
     "1": "MEQCIC4MMFdefEWnAuxeOHBXOAaJ/KuIgJm6hw4l3eJ6TOUiAiBiEWEbYqOJmOEH8IJ/hCV0A6HYmSyPHy+8Xgvmb7gVSw==",
     "2": "MEQCIBukN6pIVUMgY4AFll5VE0T9/CMdvcTBUCPimkXdLJZwAiAzJ8pqC/dsbCoOESrENS+rkKMApcLY+a+vT3nB00PQFg=="
   },
   "keys-string": {
     "0": "ad-custody[0];ad-custody[1];tuuid;user-ip;ad-size",
-    "1": "sign[0];ad-custody[2]",
-    "2": "sign[1];ad-custody[3]"
+    "1": "signature[0];ad-custody[2]",
+    "2": "signature[1];ad-custody[3]"
   }
 }

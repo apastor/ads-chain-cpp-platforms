@@ -95,7 +95,7 @@ public:
       std::string prevDomain = bidRequest["ad-custody"][custodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
       if (senderPubKey == nullptr) logger.information("no ADX publicKey");
-      std::string receivedSignature = std::string(bidRequest["sign"][custodyIndex].GetString());
+      std::string receivedSignature = std::string(bidRequest["signature"][custodyIndex].GetString());
       if (!verifier->verifyB64(senderPubKey.get(), receivedSignature, GetSignatureAtIndex(bidRequest, custodyIndex))) {
         logger.information("[BID] Signature not valid. Discarding");
         response().make_error_response(400);
@@ -132,7 +132,7 @@ public:
       const char prevCustodyIndex[2] = {custodyIndex[0] - 1, '\0'};
       std::string prevDomain = winNotice["ad-custody"][prevCustodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
-      std::string receivedSignature = std::string(winNotice["sign"][prevCustodyIndex].GetString());
+      std::string receivedSignature = std::string(winNotice["signature"][prevCustodyIndex].GetString());
       if (!verifier->verifyB64(senderPubKey.get(),
                                receivedSignature,
                                GetSignatureAtIndex(winNotice, prevCustodyIndex))) {
