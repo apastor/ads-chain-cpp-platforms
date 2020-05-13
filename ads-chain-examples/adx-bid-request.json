@@ -2,7 +2,7 @@
   "ad-size": "300x250",
   "tuuid": "829e8065-752c-1038-8943-345670abcdef",
   "user-ip": "10.0.1.5",
-  "ad-custody": {
+  "custody": {
     "0": "publisher.com",
     "1": "ssp.com",
     "2": "adx.com",
@@ -15,8 +15,8 @@
     "2": "MEQCIBukN6pIVUMgY4AFll5VE0T9/CMdvcTBUCPimkXdLJZwAiAzJ8pqC/dsbCoOESrENS+rkKMApcLY+a+vT3nB00PQFg=="
   },
   "keys-string": {
-    "0": "ad-custody[0];ad-custody[1];tuuid;user-ip;ad-size",
-    "1": "signature[0];ad-custody[2]",
-    "2": "signature[1];ad-custody[3]"
+    "0": "custody[0];custody[1];tuuid;user-ip;ad-size",
+    "1": "signature[0];custody[2]",
+    "2": "signature[1];custody[3]"
   }
 }

@@ -69,9 +69,9 @@ class ttj : public cppcms::application {
 //      Stopwatch sw(timeLogger.getLogger());
       const char custodyIndex[2] = {adInfo["custody-index"].GetString()[0], '\0'};
 //    logger.information("custody index: %s", std::string(custodyIndex));
-//    logger.information("ad custody: %s", (std::string) adInfo["ad-custody"][custodyIndex].GetString());
+//    logger.information("ad custody: %s", (std::string) adInfo["custody"][custodyIndex].GetString());
 
-      if (adInfo["ad-custody"][custodyIndex].GetString() != request().server_name()) {
+      if (adInfo["custody"][custodyIndex].GetString() != request().server_name()) {
         logger.information("Transaction custody not assigned to this server. Discarding");
         response().make_error_response(400);
       }
@@ -80,7 +80,7 @@ class ttj : public cppcms::application {
       const char nextCustodyIndex[2] = {custodyIndex[0] + 1, '\0'};
       //    logger.information("Previous custody index %s", std::string(prevCustodyIndex));
       //    logger.information("Next custody index %s", std::string(nextCustodyIndex));
-      std::string prevDomain = adInfo["ad-custody"][prevCustodyIndex].GetString();
+      std::string prevDomain = adInfo["custody"][prevCustodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
 //      sw.stop("public-key-service");
       std::string receivedSignature = std::string(adInfo["signature"][prevCustodyIndex].GetString());
@@ -92,11 +92,11 @@ class ttj : public cppcms::application {
       }
 //      sw.stop("verification");
       rapidjson::Document::AllocatorType &allocator = adInfo.GetAllocator();
-      adInfo["ad-custody"].AddMember(nextCustodyIndex, adexchange, allocator);
+      adInfo["custody"].AddMember(nextCustodyIndex, adexchange, allocator);
       adInfo["custody-index"] = nextCustodyIndex;
       std::stringstream msgstr, sign_str;
       msgstr << adInfo["signature"][prevCustodyIndex].GetString() << ";" << adexchange;
-      sign_str << "signature[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
+      sign_str << "signature[" << prevCustodyIndex << "];custody[" << nextCustodyIndex << "]";
 
       adInfo["keys-string"].AddMember(custodyIndex, sign_str.str(), allocator);
       std::string ssp_sign = signer->signB64(msgstr.str());

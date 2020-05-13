@@ -72,14 +72,14 @@ class ttj: public cppcms::application {
 
       const char custodyIndex[2] = {adInfo["custody-index"].GetString()[0], '\0'};
 
-      if (adInfo["ad-custody"][custodyIndex].GetString() != request().server_name()) {
+      if (adInfo["custody"][custodyIndex].GetString() != request().server_name()) {
         logger.information("Transaction custody not assigned to this server. Discarding");
         response().make_error_response(400);
       }
 
       const char prevCustodyIndex[2] = {custodyIndex[0] - 1, '\0'};
       const char nextCustodyIndex[2] = {custodyIndex[0] + 1, '\0'};
-      std::string prevDomain = adInfo["ad-custody"][prevCustodyIndex].GetString();
+      std::string prevDomain = adInfo["custody"][prevCustodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
       std::string receivedSignature = std::string(adInfo["signature"][prevCustodyIndex].GetString());
       if (!verifier->verifyB64(senderPubKey.get(), receivedSignature, GetSignatureAtIndex(adInfo, prevCustodyIndex))) {
@@ -89,10 +89,10 @@ class ttj: public cppcms::application {
 
 // temporary signature to bid request
       rapidjson::Document::AllocatorType &allocator = adInfo.GetAllocator();
-      adInfo["ad-custody"].AddMember(nextCustodyIndex, tempCustody, allocator);
+      adInfo["custody"].AddMember(nextCustodyIndex, tempCustody, allocator);
       std::stringstream msgstrTemp, sign_strTemp;
       msgstrTemp << adInfo["signature"][prevCustodyIndex].GetString() << ";" << tempCustody;
-      sign_strTemp << "signature[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
+      sign_strTemp << "signature[" << prevCustodyIndex << "];custody[" << nextCustodyIndex << "]";
       adInfo["keys-string"].AddMember(custodyIndex, sign_strTemp.str(), allocator);
       std::string adx_temp_sign = signer->signB64(msgstrTemp.str());
       adInfo["signature"].AddMember(custodyIndex, adx_temp_sign, allocator);
@@ -122,11 +122,11 @@ class ttj: public cppcms::application {
       const char prevCustodyIndex[2] = {custodyIndex[0] - 1, '\0'};
       const char nextCustodyIndex[2] = {custodyIndex[0] + 1, '\0'};
       // winning notice with final signature
-      adInfo["ad-custody"][nextCustodyIndex].SetString(dsp, adInfo.GetAllocator());
+      adInfo["custody"][nextCustodyIndex].SetString(dsp, adInfo.GetAllocator());
       adInfo["custody-index"] = nextCustodyIndex;
       std::stringstream msgstrFinal, sign_strFinal;
       msgstrFinal << adInfo["signature"][prevCustodyIndex].GetString() << ";" << dsp;
-      sign_strFinal << "signature[" << prevCustodyIndex << "];ad-custody[" << nextCustodyIndex << "]";
+      sign_strFinal << "signature[" << prevCustodyIndex << "];custody[" << nextCustodyIndex << "]";
       adInfo["keys-string"][custodyIndex].SetString(sign_strFinal.str(), adInfo.GetAllocator());
       std::string adx_final_sign = signer->signB64(msgstrFinal.str());
       adInfo["signature"][custodyIndex].SetString(adx_final_sign, adInfo.GetAllocator());

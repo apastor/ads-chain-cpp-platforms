@@ -121,14 +121,14 @@ class mostachio : public cppcms::application {
         std::stringstream msgstr;
         msgstr << domain << ";" << sspserver << ";"
              << uuid << ";" << client_ip << ";" << ad_size;
-        auto sign_string = "ad-custody[0];ad-custody[1];tuuid;user-ip;ad-size";
+        auto sign_string = "custody[0];custody[1];tuuid;user-ip;ad-size";
 
         std::string dom_sign = signer->signB64(msgstr.str().c_str());
 
         adtag_list_300x250 << "&tuuid=" << uuid
                       << "&user-ip=" << client_ip
-                      << "&ad-custody[0]=" << domain
-                      << "&ad-custody[1]=" << sspserver
+                      << "&custody[0]=" << domain
+                      << "&custody[1]=" << sspserver
                       << "&custody-index=" << "1"
                       << "&signature[0]=" << dom_sign
                       << "&keys-string[0]=" << sign_string;

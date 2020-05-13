@@ -88,11 +88,11 @@ public:
     if(bidRequest.HasMember("custody-index")) {
       const char custodyIndex[2] = {bidRequest["custody-index"].GetString()[0], '\0'};
       const char nextCustodyIndex[2] = {custodyIndex[0] + 1, '\0'};
-      if (bidRequest["ad-custody"][nextCustodyIndex].GetString() != std::string("AUCTION")) {
+      if (bidRequest["custody"][nextCustodyIndex].GetString() != std::string("AUCTION")) {
         logger.information("[BID] Transaction custody not assigned to this server. Discarding");
         response().make_error_response(400);
       }
-      std::string prevDomain = bidRequest["ad-custody"][custodyIndex].GetString();
+      std::string prevDomain = bidRequest["custody"][custodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
       if (senderPubKey == nullptr) logger.information("no ADX publicKey");
       std::string receivedSignature = std::string(bidRequest["signature"][custodyIndex].GetString());
@@ -125,12 +125,12 @@ public:
 
     if (winNotice.HasMember("custody-index")) {
       const char custodyIndex[2] = {winNotice["custody-index"].GetString()[0], '\0'};
-      if (winNotice["ad-custody"][custodyIndex].GetString() != request().server_name()) {
+      if (winNotice["custody"][custodyIndex].GetString() != request().server_name()) {
         logger.information("[WIN] Transaction custody not assigned to this server. Discarding");
         response().make_error_response(400);
       }
       const char prevCustodyIndex[2] = {custodyIndex[0] - 1, '\0'};
-      std::string prevDomain = winNotice["ad-custody"][prevCustodyIndex].GetString();
+      std::string prevDomain = winNotice["custody"][prevCustodyIndex].GetString();
       std::shared_ptr<PublicKey> senderPubKey = publicKeyService->getDomainPublicKey(prevDomain);
       std::string receivedSignature = std::string(winNotice["signature"][prevCustodyIndex].GetString());
       if (!verifier->verifyB64(senderPubKey.get(),
